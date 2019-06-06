@@ -13,6 +13,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -34,9 +36,10 @@ public abstract class Operation implements Serializable{
 	private static final long serialVersionUID = 7341440696856003055L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
-	
+	private long numOperation;
+		
 	private double montant;
+	
 	
 	@Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -48,22 +51,31 @@ public abstract class Operation implements Serializable{
 	@LastModifiedDate
 	private Date updatedAt;
 	
+	@ManyToOne 
+	@JoinColumn(name="NUM_CPTE")
+	private Compte compte;
+	
+	@ManyToOne
+	@JoinColumn(name="NUM_EMP")
+	private Employe employe;
+
+	
 	public Operation() {}
 
 	public Operation(long id, double montant, Date createdAt, Date updatedAt) {
 		super();
-		this.id = id;
+		this.numOperation = id;
 		this.montant = montant;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 	}
 
 	public long getId() {
-		return id;
+		return numOperation;
 	}
 
 	public void setId(long id) {
-		this.id = id;
+		this.numOperation = id;
 	}
 
 	public double getMontant() {

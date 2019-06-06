@@ -1,6 +1,7 @@
 package com.sarki.micro.model;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -13,6 +14,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -50,6 +54,16 @@ public abstract class Compte implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@LastModifiedDate
 	private Date updatedAt;
+	
+	@ManyToOne @JoinColumn(name="CODE_CLI")
+	private Client client;
+	
+	@JoinColumn(name="NUM_EMP")
+	private Employe employe;
+	
+	@OneToMany(mappedBy="compte") 
+	private Collection<Operation> operations;
+
 	
 	public Compte() {}
 

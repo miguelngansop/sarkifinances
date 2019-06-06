@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -19,11 +18,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired 
 	private UserDetailsService userDetailsService;
 	@Autowired 
-	private BCryptPasswordEncoder bCryptPasswordEncoder; 
+	//private BCryptPasswordEncoder bCryptPasswordEncoder; 
 	
 	@Override 
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService) .passwordEncoder(bCryptPasswordEncoder);
+	//	auth.userDetailsService(userDetailsService) .passwordEncoder(bCryptPasswordEncoder);
 	
 	}
 	
@@ -37,14 +36,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.authorizeRequests() 
 			.antMatchers("/users/**",
 						 "/login/**",
-						 "/api/notes",
-						 "/frssr/fournisseurPost",
-						 "/frssr/fournisseurPre",
-						 "/frssr/all",
-						 "/produit/add",
-						 "/produit/produits" ,
-						 "/produit/produits/*" ,
-						 "/api2/test") 
+						 "/apimicro/employes",
+						 "/apiagence/agences",
+						 "/apiagence/agence/*",
+						 "/apiagence/agence",
+						 "/apimicro/agence") 
+			
 			.permitAll() 
 			.antMatchers(HttpMethod.POST,"/tasks/**")
 			.hasAuthority("ADMIN") 
