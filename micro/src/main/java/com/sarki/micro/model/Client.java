@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
@@ -14,12 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
-
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
@@ -44,16 +38,8 @@ public class Client implements Serializable {
 	private String numcni;
 	private String telephone;
 	private String email;
+	private String residence;
 	
-	@Column(nullable = false, updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    @CreatedDate
-    private Date createdAt;
-	
-	@Column(nullable = false)
-	@Temporal(TemporalType.TIMESTAMP)
-	@LastModifiedDate
-	private Date updatedAt;
 	
 	@OneToMany(mappedBy="client",fetch=FetchType.LAZY,cascade=CascadeType.ALL)
 	private Collection<Compte> comptes;
@@ -61,7 +47,7 @@ public class Client implements Serializable {
 	public Client() {}
 
 	public Client(long id, @NotBlank String nom, @NotBlank String prenom, Date dateDeNaissance, @NotBlank String numcni,
-			String telephone, String email, Date createdAt, Date updatedAt) {
+			String telephone, String email, String residence) {
 		super();
 		this.id = id;
 		this.nom = nom;
@@ -70,8 +56,8 @@ public class Client implements Serializable {
 		this.numcni = numcni;
 		this.telephone = telephone;
 		this.email = email;
-		this.createdAt = createdAt;
-		this.updatedAt = updatedAt;
+		this.residence =residence;
+
 	}
 
 	public long getId() {
@@ -130,23 +116,15 @@ public class Client implements Serializable {
 		this.email = email;
 	}
 
-	public Date getCreatedAt() {
-		return createdAt;
+	public String getResidence() {
+		return residence;
 	}
 
-	public void setCreatedAt(Date createdAt) {
-		this.createdAt = createdAt;
+	public void setResidence(String residence) {
+		this.residence = residence;
 	}
 
-	public Date getUpdatedAt() {
-		return updatedAt;
-	}
 
-	public void setUpdatedAt(Date updatedAt) {
-		this.updatedAt = updatedAt;
-	}
-	
-	
 	
 	
 	

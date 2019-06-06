@@ -40,7 +40,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 						 "/apiagence/agences",
 						 "/apiagence/agence/*",
 						 "/apiagence/agence",
-						 "/apimicro/agence") 
+						 "/apimicro/agence",
+						 "/apiclient/clients",
+						 "/apiclient/client",
+						 "/apiclient/client/*",
+						 "/apicompte/comptecourant") 
 			
 			.permitAll() 
 			.antMatchers(HttpMethod.POST,"/tasks/**")
