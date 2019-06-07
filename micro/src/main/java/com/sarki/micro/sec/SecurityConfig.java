@@ -37,6 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/users/**",
 						 "/login/**",
 						 "/apimicro/employes",
+						 "/apimicro/employe",
 						 "/apiagence/agences",
 						 "/apiagence/agence/*",
 						 "/apiagence/agence",
@@ -44,7 +45,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 						 "/apiclient/clients",
 						 "/apiclient/client",
 						 "/apiclient/client/*",
-						 "/apicompte/comptecourant") 
+						 "/apicompte/comptecourant",
+						 "/apicompte/comptecourant/*",
+						 "/apicompte/compteEpargne/*",
+						 "/apicompte/compte/*",
+						 "/apicompte/comptes") 
+			
 			
 			.permitAll() 
 			.antMatchers(HttpMethod.POST,"/tasks/**")

@@ -32,11 +32,11 @@ public class ClientController {
 	      return clientRepo.save(cl);
 	  }
 	  
-	// Get All Client
-		  @GetMapping("/clients")
-		  public List<Client> getAllAgence() {
-		      return clientRepo.findAll();
-		  }
+	  // Get All Client
+	  @GetMapping("/clients")
+	  public List<Client> getAllClient() {
+	      return clientRepo.findAll();
+	  }
 		  
 	// Get a Single Client
 	  @GetMapping("/client/{id}")

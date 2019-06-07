@@ -20,7 +20,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotBlank;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -41,7 +40,6 @@ public abstract class Compte implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	private String numCompte;
 	private double solde;
 	
 	@Column(nullable = false, updatable = false)
@@ -65,14 +63,6 @@ public abstract class Compte implements Serializable {
 		this.client = client;
 	}
 
-	public Employe getEmploye() {
-		return employe;
-	}
-
-	public void setEmploye(Employe employe) {
-		this.employe = employe;
-	}
-
 	public Collection<Operation> getOperations() {
 		return operations;
 	}
@@ -81,19 +71,22 @@ public abstract class Compte implements Serializable {
 		this.operations = operations;
 	}
 
-	@JoinColumn(name="NUM_EMP")
-	private Employe employe;
-	
 	@OneToMany(mappedBy="compte") 
 	private Collection<Operation> operations;
 
 	
 	public Compte() {}
+	
+	
 
-	public Compte(long id, @NotBlank String numCompte, double solde, Date createdAt, Date updatedAt) {
+	public Compte(long id) {
 		super();
 		this.id = id;
-		this.numCompte = numCompte;
+	}
+
+	public Compte(long id,  double solde, Date createdAt, Date updatedAt) {
+		super();
+		this.id = id;
 		this.solde = solde;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
@@ -105,14 +98,6 @@ public abstract class Compte implements Serializable {
 
 	public void setId(long id) {
 		this.id = id;
-	}
-
-	public String getNumCompte() {
-		return numCompte;
-	}
-
-	public void setNumCompte(String numCompte) {
-		this.numCompte = numCompte;
 	}
 
 	public double getSolde() {

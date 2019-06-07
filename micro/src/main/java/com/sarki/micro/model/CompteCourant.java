@@ -4,7 +4,6 @@ import java.util.Date;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.validation.constraints.NotBlank;
 
 @Entity
 @DiscriminatorValue("Courant")
@@ -25,8 +24,8 @@ public class CompteCourant extends Compte{
 	}
 	
 
-	public CompteCourant(long id, @NotBlank String numCompte, double solde, Date createdAt, Date updatedAt) {
-		super(id, numCompte, solde, createdAt, updatedAt);
+	public CompteCourant(long id, double solde, Date createdAt, Date updatedAt) {
+		super(id, solde, createdAt, updatedAt);
 	}
 
 	public double getDecouvert() {

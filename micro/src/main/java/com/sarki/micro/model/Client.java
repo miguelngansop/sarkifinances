@@ -39,6 +39,10 @@ public class Client implements Serializable {
 	private String telephone;
 	private String email;
 	private String residence;
+	private String profession;
+	private String nomDuPere;
+	private String nomDeLaMere;
+	private String photo;
 	
 	
 	@OneToMany(mappedBy="client",fetch=FetchType.LAZY,cascade=CascadeType.ALL)
@@ -46,8 +50,10 @@ public class Client implements Serializable {
 	
 	public Client() {}
 
+	
+
 	public Client(long id, @NotBlank String nom, @NotBlank String prenom, Date dateDeNaissance, @NotBlank String numcni,
-			String telephone, String email, String residence) {
+			String telephone, String email, String residence, String profession, String nomDuPere, String nomDeLaMere, String photo) {
 		super();
 		this.id = id;
 		this.nom = nom;
@@ -56,9 +62,14 @@ public class Client implements Serializable {
 		this.numcni = numcni;
 		this.telephone = telephone;
 		this.email = email;
-		this.residence =residence;
-
+		this.residence = residence;
+		this.profession = profession;
+		this.nomDuPere = nomDuPere;
+		this.nomDeLaMere = nomDeLaMere;
+		this.photo=photo;
 	}
+
+
 
 	public long getId() {
 		return id;
@@ -123,6 +134,41 @@ public class Client implements Serializable {
 	public void setResidence(String residence) {
 		this.residence = residence;
 	}
+
+	public String getProfession() {
+		return profession;
+	}
+
+	public void setProfession(String profession) {
+		this.profession = profession;
+	}
+
+	public String getNomDuPere() {
+		return nomDuPere;
+	}
+
+	public void setNomDuPere(String nomDuPere) {
+		this.nomDuPere = nomDuPere;
+	}
+
+	public String getNomDeLaMere() {
+		return nomDeLaMere;
+	}
+
+	public void setNomDeLaMere(String nomDeLaMere) {
+		this.nomDeLaMere = nomDeLaMere;
+	}
+
+
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
+	}
+	
+	
 
 
 	

@@ -55,11 +55,6 @@ public abstract class Operation implements Serializable{
 	@JoinColumn(name="NUM_CPTE")
 	private Compte compte;
 	
-	@ManyToOne
-	@JoinColumn(name="NUM_EMP")
-	private Employe employe;
-
-	
 	public Operation() {}
 
 	public Operation(long id, double montant, Date createdAt, Date updatedAt) {
@@ -101,6 +96,18 @@ public abstract class Operation implements Serializable{
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-	
+
+	public long getNumOperation() {
+		return numOperation;
+	}
+
+	public void setNumOperation(long numOperation) {
+		this.numOperation = numOperation;
+	}
+
+	public void setCompte(Compte compte) {
+		this.compte = compte;
+	}
+
 	
 }

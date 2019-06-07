@@ -3,24 +3,14 @@ package com.sarki.micro.services;
 import java.util.List;
 
 import com.sarki.micro.interfaces.IMicrofinance;
-import com.sarki.micro.model.Agence;
 import com.sarki.micro.model.Client;
 import com.sarki.micro.model.Compte;
 import com.sarki.micro.model.Employe;
 import com.sarki.micro.model.Operation;
-import com.sarki.micro.repository.AgenceRepository;
 import com.sarki.micro.repository.EmployeRepository;
 
 public class Microfinance implements IMicrofinance {
 
-	@SuppressWarnings("null")
-	@Override
-	public void addAgence(Agence a) {
-		// TODO Auto-generated method stub
-		AgenceRepository agRepo = null;
-		agRepo.save(a);
-		
-	}
 
 	@SuppressWarnings("null")
 	@Override
@@ -73,11 +63,6 @@ public class Microfinance implements IMicrofinance {
 		return null;
 	}
 
-	@Override
-	public List<Agence> consulterAgences() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public List<Employe> consulterEmployes() {

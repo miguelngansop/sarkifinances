@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.sarki.micro.model.Agence;
 import com.sarki.micro.model.Employe;
-import com.sarki.micro.repository.AgenceRepository;
 import com.sarki.micro.repository.EmployeRepository;
 
 @RestController
@@ -23,7 +20,6 @@ public class EmployeController {
 	@Autowired
 	EmployeRepository emRepo;
 	@Autowired
-	AgenceRepository agRepo;
 	  // Create a new Employe
 	
 	 // Get All Employes
@@ -32,11 +28,11 @@ public class EmployeController {
 	      return emRepo.findAll();
 	  }
 	  
-	 
-	   // Create a new Agence
-		  @PostMapping("/agence")
-		  public Agence createAgence(@Valid @RequestBody Agence a) {
-		      return agRepo.save(a);
+
+	   // Create a new Employe
+		  @PostMapping("/employe")
+		  public Employe createEmploye(@Valid @RequestBody Employe e) {
+		      return emRepo.save(e);
 		  }
 	
 
