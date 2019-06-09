@@ -55,10 +55,6 @@ public abstract class Compte implements Serializable {
 	@ManyToOne @JoinColumn(name="CODE_CLI")
 	private Client client;
 	
-	public Client getClient() {
-		return client;
-	}
-
 	public void setClient(Client client) {
 		this.client = client;
 	}
@@ -122,6 +118,10 @@ public abstract class Compte implements Serializable {
 
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+
+	public Client getClient() {
+		return client;
 	}
 	
 	

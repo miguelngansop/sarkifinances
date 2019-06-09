@@ -49,6 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 						 "/apicompte/comptecourant/*",
 						 "/apicompte/compteEpargne/*",
 						 "/apicompte/compte/*",
+						 "/apicompte/compte/retrait/*",
 						 "/apicompte/comptes") 
 			
 			

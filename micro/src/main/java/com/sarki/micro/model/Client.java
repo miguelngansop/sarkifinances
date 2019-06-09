@@ -167,6 +167,11 @@ public class Client implements Serializable {
 	public void setPhoto(String photo) {
 		this.photo = photo;
 	}
+
+	public void setComptes(Collection<Compte> comptes) {
+		this.comptes = comptes;
+	}
+	
 	
 	
 
