@@ -25,11 +25,23 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 @Entity
 @Table(name="comptes")
 @EntityListeners(AuditingEntityListener.class)
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="TYPE_DE_COMPTE",discriminatorType=DiscriminatorType.STRING,length=15)
+@JsonTypeInfo(
+		  use = JsonTypeInfo.Id.NAME, 
+		  include = JsonTypeInfo.As.PROPERTY, 
+		  property = "type")
+		@JsonSubTypes({ 
+		  @Type(value = CompteCourant.class, name = "courant"), 
+		  @Type(value = CompteEpargne.class, name = "epargne") 
+		})
 public abstract class Compte implements Serializable {
 
 	/**
