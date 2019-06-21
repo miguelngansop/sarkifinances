@@ -30,18 +30,20 @@ import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @Entity
-@Table(name="comptes")
+@Table(name = "comptes")
 @EntityListeners(AuditingEntityListener.class)
-@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="TYPE_DE_COMPTE",discriminatorType=DiscriminatorType.STRING,length=15)
-@JsonTypeInfo(
-		  use = JsonTypeInfo.Id.NAME, 
-		  include = JsonTypeInfo.As.PROPERTY, 
-		  property = "type")
-		@JsonSubTypes({ 
-		  @Type(value = CompteCourant.class, name = "courant"), 
-		  @Type(value = CompteEpargne.class, name = "epargne") 
-		})
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "TYPE_DE_COMPTE", discriminatorType = DiscriminatorType.STRING, length = 15)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({ @Type(value = CompteCourant.class, name = "courant"),
+		@Type(value = CompteEpargne.class, name = "epargne"), @Type(value = CompteCollecte.class, name = "collecte"),
+		@Type(value = CompteBloque.class, name = "bloque"), @Type(value = CompteIslamique.class, name = "islamique"),
+		@Type(value = CompteConstruction.class, name = "construction"), @Type(value = CompteHadj.class, name = "hadj"),
+		@Type(value = CompteInvestissement.class, name = "investissement"),
+		@Type(value = CompteTontine.class, name = "tontine"),
+		@Type(value = CompteVieillesse.class, name = "vieilleisse"),
+		@Type(value = CompteMutuelle.class, name = "mutuelle"), @Type(value = CompteOrange.class, name = "orange"),
+		@Type(value = CompteMtn.class, name = "mtn") })
 public abstract class Compte implements Serializable {
 
 	/**
@@ -53,20 +55,23 @@ public abstract class Compte implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	private double solde;
-	
+	private double emprunt;
+	// private double frais;
+
 	@Column(nullable = false, updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    @CreatedDate
-    private Date createdAt;
-	
+	@Temporal(TemporalType.TIMESTAMP)
+	@CreatedDate
+	private Date createdAt;
+
 	@Column(nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	@LastModifiedDate
 	private Date updatedAt;
-	
-	@ManyToOne @JoinColumn(name="CODE_CLI")
+
+	@ManyToOne
+	@JoinColumn(name = "CODE_CLI")
 	private Client client;
-	
+
 	public void setClient(Client client) {
 		this.client = client;
 	}
@@ -79,23 +84,22 @@ public abstract class Compte implements Serializable {
 		this.operations = operations;
 	}
 
-	@OneToMany(mappedBy="compte") 
+	@OneToMany(mappedBy = "compte")
 	private Collection<Operation> operations;
 
-	
-	public Compte() {}
-	
-	
+	public Compte() {
+	}
 
 	public Compte(long id) {
 		super();
 		this.id = id;
 	}
 
-	public Compte(long id,  double solde, Date createdAt, Date updatedAt) {
+	public Compte(long id, double solde, double emprunt, double frais, Date createdAt, Date updatedAt) {
 		super();
 		this.id = id;
 		this.solde = solde;
+		this.emprunt = emprunt;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 	}
@@ -114,6 +118,14 @@ public abstract class Compte implements Serializable {
 
 	public void setSolde(double solde) {
 		this.solde = solde;
+	}
+
+	public double getEmprunt() {
+		return emprunt;
+	}
+
+	public void setEmprunt(double emprunt) {
+		this.emprunt = emprunt;
 	}
 
 	public Date getCreatedAt() {
@@ -135,7 +147,5 @@ public abstract class Compte implements Serializable {
 	public Client getClient() {
 		return client;
 	}
-	
-	
-	
+
 }
