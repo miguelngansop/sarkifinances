@@ -42,6 +42,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 		@Type(value = CompteInvestissement.class, name = "investissement"),
 		@Type(value = CompteTontine.class, name = "tontine"),
 		@Type(value = CompteVieillesse.class, name = "vieilleisse"),
+		@Type(value = CompteMonnaie.class, name = "monnaie"),
 		@Type(value = CompteMutuelle.class, name = "mutuelle"),})
 public abstract class Compte implements Serializable {
 
