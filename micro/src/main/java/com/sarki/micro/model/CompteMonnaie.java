@@ -15,7 +15,7 @@ public class CompteMonnaie extends Compte{
 	}
 
 	public CompteMonnaie(long id, double solde, Date createdAt, Date updatedAt) {
-		super(id, solde, createdAt, updatedAt);
+		super(id, solde, solde, solde, createdAt, updatedAt);
 		// TODO Auto-generated constructor stub
 	}
 
