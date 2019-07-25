@@ -14,7 +14,16 @@ public class Agent implements Serializable {
 	private Long id;
 	private String nom;
 	private String cni;
-	private String phone; 
+	private String phone;
+	
+	public Agent(Long id, String nom, String cni, String phone) {
+		super();
+		this.id = id;
+		this.nom = nom;
+		this.cni = cni;
+		this.phone = phone;
+	} 
+	
 	
 	
 
