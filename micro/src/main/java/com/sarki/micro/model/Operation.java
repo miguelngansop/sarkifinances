@@ -28,19 +28,13 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 
 @Entity
-@Table(name="operations")
+@Table(name = "operations")
 @EntityListeners(AuditingEntityListener.class)
-@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="type_operations",discriminatorType=DiscriminatorType.STRING,length=15)
-@JsonTypeInfo(
-		  use = JsonTypeInfo.Id.NAME, 
-		  include = JsonTypeInfo.As.PROPERTY, 
-		  property = "type")
-		@JsonSubTypes({ 
-		  @Type(value = Retrait.class, name = "retrait"), 
-		  @Type(value = Versement.class, name = "versement") 
-		})
-public abstract class Operation implements Serializable{
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "type_operations", discriminatorType = DiscriminatorType.STRING, length = 15)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({ @Type(value = Retrait.class, name = "retrait"), @Type(value = Versement.class, name = "versement") })
+public abstract class Operation implements Serializable {
 
 	/**
 	 * 
@@ -49,25 +43,25 @@ public abstract class Operation implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long numOperation;
-		
+
 	private double montant;
-	
-	
+
 	@Column(nullable = false, updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    @CreatedDate
-    private Date createdAt;
-	
+	@Temporal(TemporalType.TIMESTAMP)
+	@CreatedDate
+	private Date createdAt;
+
 	@Column(nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	@LastModifiedDate
 	private Date updatedAt;
-	
-	@ManyToOne 
-	@JoinColumn(name="NUM_CPTE")
+
+	@ManyToOne
+	@JoinColumn(name = "NUM_CPTE")
 	private Compte compte;
-	
-	public Operation() {}
+
+	public Operation() {
+	}
 
 	public Operation(long id, double montant, Date createdAt, Date updatedAt) {
 		super();
@@ -121,8 +115,8 @@ public abstract class Operation implements Serializable{
 		this.compte = compte;
 	}
 
+	public Compte getCompte() {
+		return compte;
+	}
 
-	
-
-	
 }

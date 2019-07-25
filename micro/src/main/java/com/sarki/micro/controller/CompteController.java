@@ -18,8 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sarki.micro.model.Client;
 import com.sarki.micro.model.Compte;
+import com.sarki.micro.model.CompteCollecte;
 import com.sarki.micro.model.CompteCourant;
 import com.sarki.micro.model.CompteEpargne;
+import com.sarki.micro.model.Emprunt;
+import com.sarki.micro.model.Operation;
+import com.sarki.micro.model.Remboursement;
 import com.sarki.micro.model.Retrait;
 import com.sarki.micro.model.Versement;
 import com.sarki.micro.repository.ClientRepository;
@@ -32,7 +36,6 @@ import exception.ResourceNotFoundException;
 @RequestMapping("/apicompte")
 public class CompteController {
 
-
 	@Autowired
 	CompteRepository compteRepo;
 	@Autowired
@@ -42,14 +45,14 @@ public class CompteController {
 	// Create a new CompteCourant
 
 	@PostMapping("/comptecourant/{id}")
-	public CompteCourant createCompteCourant( @PathVariable(value = "id") Long clientId ) {
+	public CompteCourant createCompteCourant(@PathVariable(value = "id") Long clientId) {
 		CompteCourant cpt = new CompteCourant();
-		if(clientRepo.existsById(clientId)) {
+		if (clientRepo.existsById(clientId)) {
 			cpt.setSolde(0); // initialisation du solde a la creation
 			cpt.setCreatedAt(new Date());
 			cpt.setDecouvert(0); // initialisation du decouvert a la creation
 			cpt.setUpdatedAt(new Date());
-			Client  cl = new Client();
+			Client cl = new Client();
 			cl.setId(clientId);
 			cl.setEmail(clientRepo.getOne(clientId).getEmail());
 			cl.setDateDeNaissance(clientRepo.getOne(clientId).getDateDeNaissance());
@@ -59,8 +62,8 @@ public class CompteController {
 			cl.setNumcni(clientRepo.getOne(clientId).getNumcni());
 			cl.setProfession(clientRepo.getOne(clientId).getProfession());
 			cl.setResidence(clientRepo.getOne(clientId).getResidence());
-			cl.setTelephone(clientRepo.getOne(clientId).getTelephone()); 
-			System.out.println("\n\n"+ cl.getNom() +" "+ cl.getId()+"\n\n");
+			cl.setTelephone(clientRepo.getOne(clientId).getTelephone());
+			System.out.println("\n\n" + cl.getNom() + " " + cl.getId() + "\n\n");
 
 			cpt.setClient(cl);
 
@@ -69,22 +72,66 @@ public class CompteController {
 			return null;
 		}
 
-
 	}
 
 	// Create a new CompteEpargne
 
 	@PostMapping("/compteEpargne/{id}")
-	public CompteEpargne createCompteEpargne( @PathVariable(value = "id") Long clientId ) {
+	public CompteEpargne createCompteEpargne(@PathVariable(value = "id") Long clientId,
+			@Valid @RequestBody double montantInit) {
 		CompteEpargne cpt = new CompteEpargne();
+
+		if (clientRepo.existsById(clientId)) {
+			if (montantInit >= (CompteEpargne.getSoldeMin() + CompteEpargne.getFrais())) {
+				cpt.setSolde(0); // initialisation du solde a la creation
+				cpt.setCreatedAt(new Date());
+				cpt.setTaux(5);
+				cpt.setUpdatedAt(new Date());
+				Client cl = new Client();
+				cl.setId(clientId);
+				cl.setEmail(clientRepo.getOne(clientId).getEmail());
+				cl.setDateDeNaissance(clientRepo.getOne(clientId).getDateDeNaissance());
+				cl.setNom(clientRepo.getOne(clientId).getNom());
+				cl.setNomDeLaMere(clientRepo.getOne(clientId).getNomDeLaMere());
+				cl.setNomDuPere(clientRepo.getOne(clientId).getNomDuPere());
+				cl.setNumcni(clientRepo.getOne(clientId).getNumcni());
+				cl.setProfession(clientRepo.getOne(clientId).getProfession());
+				cl.setResidence(clientRepo.getOne(clientId).getResidence());
+				cl.setTelephone(clientRepo.getOne(clientId).getTelephone());
+				cpt.setClient(cl);
+
+				CompteEpargne cptenregistre = compteRepo.save(cpt);
+				Versement details = new Versement();
+
+				cptenregistre.setSolde(cptenregistre.getSolde() + montantInit-CompteEpargne.getFrais());
+				details.setCompte(cptenregistre);
+				details.setMontant(montantInit);
+				details.setCreatedAt(new Date());
+				details.setUpdatedAt(new Date());
+				opRepo.save(details);
+			} else {
+
+			}
+
+			return compteRepo.save(cpt);
+		} else {
+			return null;
+		}
+	}
+
+	// Create a new CompteCollecte
+
+	@PostMapping("/compteCollecte/{id}")
+	public CompteCollecte createCompteCollecte(@PathVariable(value = "id") Long clientId) {
+		CompteCollecte cpt = new CompteCollecte();
 
 		if (clientRepo.existsById(clientId)) {
 			cpt.setSolde(0); // initialisation du solde a la creation
 			cpt.setCreatedAt(new Date());
-			cpt.setTaux(5);
+			cpt.setTauxPreleve(3);
 			cpt.setUpdatedAt(new Date());
 
-			Client  cl = new Client();
+			Client cl = new Client();
 			cl.setId(clientId);
 			cl.setEmail(clientRepo.getOne(clientId).getEmail());
 			cl.setDateDeNaissance(clientRepo.getOne(clientId).getDateDeNaissance());
@@ -94,11 +141,11 @@ public class CompteController {
 			cl.setNumcni(clientRepo.getOne(clientId).getNumcni());
 			cl.setProfession(clientRepo.getOne(clientId).getProfession());
 			cl.setResidence(clientRepo.getOne(clientId).getResidence());
-			cl.setTelephone(clientRepo.getOne(clientId).getTelephone());  
+			cl.setTelephone(clientRepo.getOne(clientId).getTelephone());
 
 			cpt.setClient(cl);
 			return compteRepo.save(cpt);
-		}else {
+		} else {
 			return null;
 		}
 	}
@@ -112,16 +159,15 @@ public class CompteController {
 	// Get a Single Compte
 	@GetMapping("/compte/{id}")
 	public Compte getCompteById(@PathVariable(value = "id") Long compteId) {
-		return compteRepo.findById(compteId)
-				.orElseThrow(() -> new ResourceNotFoundException("Compte", "id", compteId));
+		return compteRepo.findById(compteId).orElseThrow(() -> new ResourceNotFoundException("Compte", "id", compteId));
 	}
 
-	//versement
+	// versement
 
 	@PatchMapping("/compte/{id}")
-	public ResponseEntity<?> versement(@PathVariable(value = "id") Long compteId,
-			@Valid @RequestBody Versement details) throws ResourceNotFoundException {
-		Compte compte =  compteRepo.findById(compteId)
+	public ResponseEntity<?> versement(@PathVariable(value = "id") Long compteId, @Valid @RequestBody Versement details)
+			throws ResourceNotFoundException {
+		Compte compte = compteRepo.findById(compteId)
 				.orElseThrow(() -> new ResourceNotFoundException("CompteCourant", "id", compteId));
 		compte.setSolde(compte.getSolde() + details.getMontant());
 		final Compte updatedCompte = compteRepo.save(compte);
@@ -129,17 +175,17 @@ public class CompteController {
 		details.setCreatedAt(new Date());
 		details.setUpdatedAt(new Date());
 		opRepo.save(details);
-		return new ResponseEntity < > (updatedCompte, HttpStatus.OK);
+		return new ResponseEntity<>(updatedCompte, HttpStatus.OK);
 	}
 
-	//retrait
+	// retrait
 
 	@PatchMapping("/compte/retrait/{id}")
-	public ResponseEntity<?> retrait(@PathVariable(value = "id") Long compteId,
-			@Valid @RequestBody Retrait details) throws ResourceNotFoundException {
-		Compte compte =  compteRepo.findById(compteId)
+	public ResponseEntity<?> retrait(@PathVariable(value = "id") Long compteId, @Valid @RequestBody Retrait details)
+			throws ResourceNotFoundException {
+		Compte compte = compteRepo.findById(compteId)
 				.orElseThrow(() -> new ResourceNotFoundException("Compte", "id", compteId));
-		if(compte.getSolde() >= details.getMontant()) {
+		if (compte.getSolde() >= details.getMontant()) {
 			compte.setSolde(compte.getSolde() - details.getMontant());
 			final Compte updatedCompte = compteRepo.save(compte);
 			details.setCompte(compte);
@@ -148,11 +194,39 @@ public class CompteController {
 			opRepo.save(details);
 			return ResponseEntity.ok(updatedCompte);
 
-		}else {
+		} else {
 			return ResponseEntity.ok(compte);
 		}
 
 	}
 
+	// emprunt
 
+	@PatchMapping("/compte/emprunt/{id}")
+	public ResponseEntity<?> emprunt(@PathVariable(value = "id") Long compteId, @Valid @RequestBody Emprunt details)
+			throws ResourceNotFoundException {
+		Compte compte = compteRepo.findById(compteId)
+				.orElseThrow(() -> new ResourceNotFoundException("Compte", "id", compteId));
+		compte.setEmprunt(details.getMontant());
+		final Compte updatedCompte = compteRepo.save(compte);
+		details.setCompte(compte);
+		details.setCreatedAt(new Date());
+		details.setUpdatedAt(new Date());
+		opRepo.save(details);
+		return new ResponseEntity<>(updatedCompte, HttpStatus.OK);
+	}
+	// remboursement
+
+	@PatchMapping("/compte/remboursement/{id}")
+	public ResponseEntity<?> remboursement(@PathVariable(value = "id") Long opId,
+			@Valid @RequestBody Remboursement details) throws ResourceNotFoundException {
+		Operation op = opRepo.findById(opId).orElseThrow(() -> new ResourceNotFoundException("Operation", "id", opId));
+		op.getCompte().setEmprunt(op.getCompte().getEmprunt() - details.getMontant());
+		final Compte updatedCompte = compteRepo.save(op.getCompte());
+		details.setCompte(op.getCompte());
+		details.setCreatedAt(new Date());
+		details.setUpdatedAt(new Date());
+		opRepo.save(details);
+		return ResponseEntity.ok(updatedCompte);
+	}
 }
