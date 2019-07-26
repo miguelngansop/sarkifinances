@@ -1,3 +1,4 @@
+
 package com.sarki.micro.model;
 
 import java.io.Serializable;
@@ -141,5 +142,4 @@ public abstract class Compte implements Serializable {
 	public Client getClient() {
 		return client;
 	}
-
 }
