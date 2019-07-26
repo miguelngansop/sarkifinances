@@ -37,12 +37,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({ @Type(value = CompteCourant.class, name = "courant"),
 		@Type(value = CompteEpargne.class, name = "epargne"), @Type(value = CompteCollecte.class, name = "collecte"),
-		@Type(value = CompteBloque.class, name = "bloque"), @Type(value = CompteIslamique.class, name = "islamique"),
-		@Type(value = CompteConstruction.class, name = "construction"), @Type(value = CompteHadj.class, name = "hadj"),
-		@Type(value = CompteInvestissement.class, name = "investissement"),
-		@Type(value = CompteTontine.class, name = "tontine"),
-		@Type(value = CompteVieillesse.class, name = "vieilleisse"),
-		@Type(value = CompteMutuelle.class, name = "mutuelle"), @Type(value = CompteOrange.class, name = "orange"),
 		@Type(value = CompteMtn.class, name = "mtn") })
 public abstract class Compte implements Serializable {
 
