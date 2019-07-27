@@ -26,15 +26,13 @@ import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @Entity
-@Table(name="clients")
+@Table(name = "clients")
 @EntityListeners(AuditingEntityListener.class)
-@Inheritance(strategy= InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "TYPE_DE_CLIENT", discriminatorType = DiscriminatorType.STRING, length = 25)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-@JsonSubTypes({
-	@Type(value = Particulier.class, name = "particulier"),
-	@Type(value = Commercants.class, name = "commercant")
-	})
+@JsonSubTypes({ @Type(value = Particulier.class, name = "particulier"),
+		@Type(value = Commercants.class, name = "commercant") })
 
 public class Client implements Serializable {
 
@@ -60,17 +58,16 @@ public class Client implements Serializable {
 	private String nomDuPere;
 	private String nomDeLaMere;
 	private String photo;
-	
-	
-	@OneToMany(mappedBy="client",fetch=FetchType.LAZY,cascade=CascadeType.ALL)
-	private Collection<Compte> comptes;
-	
-	public Client() {}
 
-	
+	@OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Collection<Compte> comptes;
+
+	public Client() {
+	}
 
 	public Client(long id, @NotBlank String nom, @NotBlank String prenom, Date dateDeNaissance, @NotBlank String numcni,
-			String telephone, String email, String residence, String profession, String nomDuPere, String nomDeLaMere, String photo) {
+			String telephone, String email, String residence, String profession, String nomDuPere, String nomDeLaMere,
+			String photo) {
 		super();
 		this.id = id;
 		this.nom = nom;
@@ -83,10 +80,8 @@ public class Client implements Serializable {
 		this.profession = profession;
 		this.nomDuPere = nomDuPere;
 		this.nomDeLaMere = nomDeLaMere;
-		this.photo=photo;
+		this.photo = photo;
 	}
-
-
 
 	public long getId() {
 		return id;
@@ -176,7 +171,6 @@ public class Client implements Serializable {
 		this.nomDeLaMere = nomDeLaMere;
 	}
 
-
 	public String getPhoto() {
 		return photo;
 	}
@@ -188,17 +182,5 @@ public class Client implements Serializable {
 	public void setComptes(Collection<Compte> comptes) {
 		this.comptes = comptes;
 	}
-	
-	
-	
 
-
-	
-	
-	
-	
-	
-	
-	
-	
 }

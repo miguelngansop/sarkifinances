@@ -33,12 +33,10 @@ import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type_operations", discriminatorType = DiscriminatorType.STRING, length = 15)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-@JsonSubTypes({ @Type(value = Retrait.class, name = "retrait"), @Type(value = Versement.class, name = "versement") })
+@JsonSubTypes({ @Type(value = Retrait.class, name = "retrait"), @Type(value = Versement.class, name = "versement"), 
+	 @Type(value = Prelevement.class, name = "Prelevement")})
 public abstract class Operation implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 7341440696856003055L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,6 +57,10 @@ public abstract class Operation implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "NUM_CPTE")
 	private Compte compte;
+	
+	@ManyToOne
+	@JoinColumn(name = "NUM_AGENT")
+	private Agent agent;
 
 	public Operation() {
 	}
@@ -118,5 +120,14 @@ public abstract class Operation implements Serializable {
 	public Compte getCompte() {
 		return compte;
 	}
+
+	public Agent getAgent() {
+		return agent;
+	}
+
+	public void setAgent(Agent agent) {
+		this.agent = agent;
+	}
+	
 
 }

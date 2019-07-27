@@ -36,9 +36,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "TYPE_DE_COMPTE", discriminatorType = DiscriminatorType.STRING, length = 15)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-@JsonSubTypes({ @Type(value = CompteCourant.class, name = "courant"),
-		@Type(value = CompteEpargne.class, name = "epargne"), @Type(value = CompteCollecte.class, name = "collecte"),
-		@Type(value = CompteMtn.class, name = "mtn") })
+@JsonSubTypes({ @Type(value = CompteMonnaie.class, name = "monnaie") })
 public abstract class Compte implements Serializable {
 
 	/**

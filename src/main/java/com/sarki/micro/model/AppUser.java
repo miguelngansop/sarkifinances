@@ -9,17 +9,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
-
 @Entity
 public class AppUser {
-	
-	@Id @GeneratedValue
+
+	@Id
+	@GeneratedValue
 	private Long id;
 	private String username;
 	private String password;
-	@ManyToMany(fetch=FetchType.EAGER)
-	private Collection<AppRole> roles=new ArrayList<>();
-	
+	@ManyToMany(fetch = FetchType.EAGER)
+	private Collection<AppRole> roles = new ArrayList<>();
+
 	public AppUser(Long id, String username, String password, Collection<AppRole> roles) {
 		super();
 		this.id = id;
@@ -63,8 +63,5 @@ public class AppUser {
 	public void setRoles(Collection<AppRole> roles) {
 		this.roles = roles;
 	}
-	
-	
-	
-	
+
 }

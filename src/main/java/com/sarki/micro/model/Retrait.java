@@ -9,9 +9,6 @@ import javax.persistence.Entity;
 @DiscriminatorValue("Retrait")
 public class Retrait extends Operation {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 4988618213487184480L;
 
 	public Retrait() {
