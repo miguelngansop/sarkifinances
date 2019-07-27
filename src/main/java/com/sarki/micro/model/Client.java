@@ -33,13 +33,11 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({ @Type(value = Particulier.class, name = "particulier"),
 		@Type(value = Commercants.class, name = "commercant") })
-
-public class Client implements Serializable {
+public class Client  {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 5241588316723078417L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,7 +47,6 @@ public class Client implements Serializable {
 	@NotBlank
 	private String prenom;
 	private Date dateDeNaissance;
-	@NotBlank
 	private String numcni;
 	private String telephone;
 	private String email;
@@ -65,7 +62,7 @@ public class Client implements Serializable {
 	public Client() {
 	}
 
-	public Client(long id, @NotBlank String nom, @NotBlank String prenom, Date dateDeNaissance, @NotBlank String numcni,
+	public Client(long id, @NotBlank String nom, @NotBlank String prenom, Date dateDeNaissance,  String numcni,
 			String telephone, String email, String residence, String profession, String nomDuPere, String nomDeLaMere,
 			String photo) {
 		super();

@@ -1,5 +1,6 @@
 package com.sarki.micro.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.DiscriminatorValue;
@@ -8,7 +9,11 @@ import javax.validation.constraints.NotBlank;
 
 @Entity
 @DiscriminatorValue("particulier")
-public class Particulier extends Client {
+public class Particulier extends Client{
+
+	/**
+	 * 
+	 */
 
 	public Particulier() {
 		super();

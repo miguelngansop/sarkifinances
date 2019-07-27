@@ -11,11 +11,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sarki.micro.model.Client;
+import com.sarki.micro.model.Commercants;
 import com.sarki.micro.model.Compte;
+import com.sarki.micro.model.CompteMonnaie;
+import com.sarki.micro.model.Particulier;
 import com.sarki.micro.model.Retrait;
 import com.sarki.micro.model.Versement;
 import com.sarki.micro.repository.ClientRepository;
@@ -23,6 +28,7 @@ import com.sarki.micro.repository.CompteRepository;
 import com.sarki.micro.repository.OperationRepository;
 
 import exception.ResourceNotFoundException;
+import javassist.expr.Instanceof;
 
 @RestController
 @RequestMapping("/apicompte")
@@ -47,6 +53,38 @@ public class CompteController {
 	public Compte getCompteById(@PathVariable(value = "id") Long compteId) {
 		return compteRepo.findById(compteId).orElseThrow(() -> new ResourceNotFoundException("Compte", "id", compteId));
 	}
+
+	// creation d'un compte Monnaie
+
+	@PostMapping("/add/{id}/{code}")
+	public Compte add(@PathVariable(value="id") Long clientId,@PathVariable(value="code") Long code ,@Valid @RequestBody CompteMonnaie compte) {
+		if (clientRepo.existsById(clientId)) {
+			Client cl = clientRepo.getOne(clientId);
+			compte.setCreatedAt(new Date());
+			compte.setUpdatedAt(new Date());
+			compte.setSolde(0);
+			if(code == 1) {				// particulier
+				Particulier p = new Particulier();
+				p.setId(clientId);
+				p.setEmail(cl.getEmail());
+				p.setNom(cl.getNom());
+				p.setPhoto(cl.getPhoto());
+				compte.setClient(p);
+			}else{
+				Commercants cmt = new Commercants();
+				cmt.setId(clientId);
+				cmt.setEmail(cl.getEmail());
+				cmt.setNom(cl.getNom());
+				compte.setClient(cmt);
+				
+			}
+			return compteRepo.save(compte);
+
+		}else {
+			return null;
+		}
+	}
+
 
 	// versement
 

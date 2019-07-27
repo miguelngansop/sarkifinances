@@ -1,5 +1,6 @@
 package com.sarki.micro.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.DiscriminatorValue;
@@ -9,6 +10,11 @@ import javax.validation.constraints.NotBlank;
 @Entity
 @DiscriminatorValue("commercant")
 public class Commercants extends Client {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5872876714516006240L;
 
 	public Commercants() {
 		super();

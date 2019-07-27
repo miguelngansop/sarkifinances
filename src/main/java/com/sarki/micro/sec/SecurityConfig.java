@@ -43,15 +43,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 						 "/apiagence/agence",
 						 "/apimicro/agence",
 						 "/apiclient/clients",
-						 "/apiclient/client",
-						 "/apiclient/client/*",
-						 "/apicompte/comptecourant",
-						 "/apicompte/comptecourant/*",
-						 "/apicompte/compteEpargne/*",
-						 "/apicompte/compte/*",
-						 "/apicompte/compte/retrait/*",
-						 "apiconpte/compte/emprunt/*",
-						 "apiconpte/compte/remboursement/*",
+						 "/apiclient/**",
+						 "/apicompte/**",
+						 "/monnaie/**",
+						 "/config/**",
 						 "/apicompte/comptes") 
 			
 			
