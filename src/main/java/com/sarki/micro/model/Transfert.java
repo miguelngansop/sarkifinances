@@ -1,12 +1,11 @@
 package com.sarki.micro.model;
 
-import java.util.Date;
-
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import java.util.Date;
 
 @Entity
-@DiscriminatorValue("Transfert")
+@DiscriminatorValue("transfert")
 public class Transfert extends Operation {
 
 	private static final long serialVersionUID = 5346137113635275473L;
