@@ -1,12 +1,11 @@
 package com.sarki.micro.model;
 
-import java.util.Date;
-
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import java.util.Date;
 
 @Entity
-@DiscriminatorValue("Monnaie")
+@DiscriminatorValue("monnaie")
 public class CompteMonnaie extends Compte{
 
 	public CompteMonnaie() {

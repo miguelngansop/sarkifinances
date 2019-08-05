@@ -1,42 +1,46 @@
 package com.sarki.micro.controller;
 
-import java.util.Date;
-
-import javax.validation.Valid;
-
+import com.sarki.micro.model.*;
+import com.sarki.micro.repository.*;
+import com.sarki.micro.services.OperationsService;
+import exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import com.sarki.micro.model.Agent;
-import com.sarki.micro.model.Compte;
-import com.sarki.micro.model.Retrait;
-import com.sarki.micro.model.Transfert;
-import com.sarki.micro.model.Versement;
-import com.sarki.micro.repository.AgentRepository;
-import com.sarki.micro.repository.ClientRepository;
-import com.sarki.micro.repository.CompteRepository;
-import com.sarki.micro.repository.OperationRepository;
+import org.springframework.web.bind.annotation.*;
 
-import exception.ResourceNotFoundException;
+import javax.validation.Valid;
+import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/monnaie")
 public class OperationsMonnaieCtrl {
 
-	@Autowired
+    final
 	CompteRepository compteRepo;
-	@Autowired
+    final
 	ClientRepository clientRepo;
-	@Autowired
+    final
 	OperationRepository opRepo;
 
+    final
+    AgentRepository agentRepo;
+
+    private final OperationsService operationsService;
+    private final CompteMonnaieRepository compteMonnaieRepo;
+    private final TransfertRepository transfertRepo;
+
 	@Autowired
-	AgentRepository agentRepo;
+    public OperationsMonnaieCtrl(CompteRepository compteRepo, ClientRepository clientRepo, OperationRepository opRepo, AgentRepository agentRepo, OperationsService operationsService, CompteMonnaieRepository compteMonnaieRepository, TransfertRepository transfertRepo) {
+        this.compteRepo = compteRepo;
+        this.clientRepo = clientRepo;
+        this.opRepo = opRepo;
+        this.agentRepo = agentRepo;
+        this.operationsService = operationsService;
+        this.compteMonnaieRepo = compteMonnaieRepository;
+        this.transfertRepo = transfertRepo;
+    }
 	// Create a new CompteCourant
 
 	// retrait
@@ -126,24 +130,27 @@ public class OperationsMonnaieCtrl {
 	
 	@PatchMapping("/transfert/{idExpediteur}/{idBeneficiaire}")
 	public ResponseEntity<?> transfert(
-			@PathVariable(value="idExpediteur") Long idExpediteur,
-			@PathVariable(value="idBeneficiaire") Long idBeneficiaire,
-			@Valid @RequestBody Transfert transert) {
-		
-		Compte compte = compteRepo.findById(idExpediteur)
-				.orElseThrow(() -> new ResourceNotFoundException("Compte", "id", idExpediteur));
-		if (compte.getSolde() >= transert.getMontant()) {
-			compte.setSolde(compte.getSolde() - transert.getMontant());
-			final Compte updatedCompte = compteRepo.save(compte);
-			transert.setCompte(compte);
-			transert.setCreatedAt(new Date());
-			transert.setUpdatedAt(new Date());
-			opRepo.save(transert);
-			return ResponseEntity.ok(updatedCompte);
-		} else {
-			return ResponseEntity.ok(compte);
-		}
-		
-		}
+            @PathVariable(value="idExpediteur") Long idExpediteur,
+            @PathVariable(value="idBeneficiaire") Long idBeneficiaire,
+            @Valid @RequestBody Transfert transert) {
 
+        Compte expediteur = compteRepo.findById(idExpediteur)
+                .orElseThrow(() -> new ResourceNotFoundException("Compte expiditaire", "id", idExpediteur));
+
+        Compte beneficaire = compteRepo.findById(idBeneficiaire)
+                .orElseThrow(() -> new ResourceNotFoundException("Compte beneficiaire", "id", idBeneficiaire));
+
+        if (expediteur.getSolde() >= transert.getMontant()) {
+            return ResponseEntity.ok(operationsService.transfert(expediteur, beneficaire, transert));
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Solde Expediteur Insuffisant");
+        }
+
+    }
+
+    //Historique des transactions
+    @GetMapping("/transactions/{idExpediteur}")
+    public List<Operation> getHistoriqueTransactions(@PathVariable(value = "idExpediteur") Long idExpediteur) {
+        return opRepo.findAllByCompteIdOrderByCreatedAtDesc(idExpediteur);
+    }
 }
