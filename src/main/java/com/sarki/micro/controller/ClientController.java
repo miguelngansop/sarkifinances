@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sarki.micro.model.AppUser;
 import com.sarki.micro.model.Client;
 import com.sarki.micro.model.Commercants;
 import com.sarki.micro.model.Particulier;
+import com.sarki.micro.repository.AppUserRepository;
 import com.sarki.micro.repository.ClientRepository;
 
 import exception.ResourceNotFoundException;
@@ -28,15 +30,21 @@ public class ClientController {
 	@Autowired
 	ClientRepository clientRepo;
 
+	@Autowired
+	AppUserRepository userRepository;
 	// Create a new Client Particulier
-	@PostMapping("/particulier")
-	public Particulier createAgence(@Valid @RequestBody Particulier cl) {
+	@PostMapping("/particulier/{userId}")
+	public Particulier createAgence(@Valid @RequestBody Particulier cl, @PathVariable(value="userId") Long userId) {
+		cl.setAppuser(userRepository.getOne(userId));
 		return clientRepo.save(cl);
 	}
 
 	// Create commercant
-	@PostMapping("/commercant")
-	public Commercants createAgence(@Valid @RequestBody Commercants cl) {
+	@PostMapping("/commercant/{userId}")
+	public Commercants createAgence(@Valid @RequestBody Commercants cl, @PathVariable(value="userId") Long userId) {
+		AppUser user = new AppUser();
+		user.setId(userId);
+		cl.setAppuser(user);
 		return clientRepo.save(cl);
 	}
 
@@ -57,7 +65,6 @@ public class ClientController {
 	public ResponseEntity<?> deleteAgence(@PathVariable(value = "id") Long clientId) {
 		Client client = clientRepo.findById(clientId)
 				.orElseThrow(() -> new ResourceNotFoundException("Client", "id", clientId));
-
 		clientRepo.delete(client);
 		return ResponseEntity.ok().build();
 	}

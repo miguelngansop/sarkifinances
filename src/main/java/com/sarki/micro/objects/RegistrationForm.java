@@ -5,6 +5,7 @@ public class RegistrationForm {
 	private String username;
 	private String password;
 	private String repassword;
+	private String email;
 	
 	public RegistrationForm(String username, String password, String repassword) {
 		super();
@@ -38,6 +39,15 @@ public class RegistrationForm {
 	public void setRepassword(String repassword) {
 		this.repassword = repassword;
 	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
 	
 	
 	

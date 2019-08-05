@@ -49,7 +49,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 						 "/apiagence/agence/*",
 						 "/apiagence/agence",
 						 "/apimicro/agence",
-						 "/apiclient/clients",
 						 "/apiclient/**",
 						 "/apicompte/**",
 						 "/monnaie/**",

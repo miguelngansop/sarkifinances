@@ -24,7 +24,7 @@ public class AccountServicesImp implements AccountServices{
 	public AppUser saveUser(AppUser u) {
 		// TODO Auto-generated method stub
 		u.setPassword(new BCryptPasswordEncoder() .encode(u.getPassword()));
-		return userRepository.save(u);
+		return userRepository.saveAndFlush(u);
 	}
 
 	@Override

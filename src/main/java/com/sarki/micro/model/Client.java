@@ -1,6 +1,5 @@
 package com.sarki.micro.model;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 
@@ -15,12 +14,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -44,7 +46,6 @@ public class Client  {
 	private long id;
 	@NotBlank
 	private String nom;
-	@NotBlank
 	private String prenom;
 	private Date dateDeNaissance;
 	private String numcni;
@@ -56,13 +57,19 @@ public class Client  {
 	private String nomDeLaMere;
 	private String photo;
 
+	@JsonBackReference("comptes-client")
 	@OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Collection<Compte> comptes;
+	
+	
+	 @OneToOne
+	 @JoinColumn(name = "user_id", referencedColumnName = "id")
+	 private AppUser appuser;
 
 	public Client() {
 	}
 
-	public Client(long id, @NotBlank String nom, @NotBlank String prenom, Date dateDeNaissance,  String numcni,
+	public Client(long id, @NotBlank String nom,  String prenom, Date dateDeNaissance,  String numcni,
 			String telephone, String email, String residence, String profession, String nomDuPere, String nomDeLaMere,
 			String photo) {
 		super();
@@ -78,6 +85,10 @@ public class Client  {
 		this.nomDuPere = nomDuPere;
 		this.nomDeLaMere = nomDeLaMere;
 		this.photo = photo;
+	}
+
+	public Client(int i) {
+		// TODO Auto-generated constructor stub
 	}
 
 	public long getId() {
@@ -179,5 +190,15 @@ public class Client  {
 	public void setComptes(Collection<Compte> comptes) {
 		this.comptes = comptes;
 	}
+
+	public AppUser getAppuser() {
+		return appuser;
+	}
+
+	public void setAppuser(AppUser appuser) {
+		this.appuser = appuser;
+	}
+	
+	
 
 }
